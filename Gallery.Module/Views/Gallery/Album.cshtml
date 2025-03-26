@@ -16,7 +16,10 @@
             <div class="card">
                 @if (photo.Content.PhotoPart?.ImageMediaPath != null)
                 {
-                    <img class="card-img-top" src="@Url.Content(photo.Content.PhotoPart.ImageMediaPath)" alt="@photo.DisplayText">
+                    <p>Path: @photo.Content.PhotoPart.ImageMediaPath</p>
+                    <img class="card-img-top"
+                         src="@Url.Content("~/Media" + (string)photo.Content.PhotoPart.ImageMediaPath)"
+                         alt="@photo.DisplayText" />
                 }
                 <div class="card-body">
                     <h5 class="card-title">@photo.DisplayText</h5>

@@ -144,13 +144,15 @@ namespace Gallery.Module.Controllers
                     
                     // Store the path in the PhotoPart
                     photoPart.ImageMediaPath = path;
-                    Console.WriteLine("Assigned AlbumContentItemId: " + photoPart.AlbumContentItemId);
-                    Console.WriteLine("model.AlbumId: " + model.AlbumId);
+                 
                 }
                 
                 // Set album reference
                 photoPart.AlbumContentItemId = model.AlbumId;
+                photoContentItem.Apply(photoPart);
                 Console.WriteLine("model.AlbumId: " + model.AlbumId);
+                Console.WriteLine("Assigned AlbumContentItemId: " + photoPart.AlbumContentItemId);
+                Console.WriteLine("model.AlbumId:" + model.AlbumId);
                 // Handle tags
                 if (!string.IsNullOrWhiteSpace(model.Tags))
                 {
