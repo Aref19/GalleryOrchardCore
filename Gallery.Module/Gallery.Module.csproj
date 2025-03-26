@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="OrchardCore.Module.Targets" Version="2.1.6" />
+    <PackageReference Include="OrchardCore.Data.Abstractions" Version="2.1.6" />
+    <PackageReference Include="OrchardCore.DisplayManagement" Version="2.1.6" />
+    <PackageReference Include="OrchardCore.ResourceManagement" Version="2.1.6" />
+    <PackageReference Include="OrchardCore.Media.Abstractions" Version="2.1.6" />
+    <PackageReference Include="OrchardCore.Users.Abstractions" Version="2.1.6" />
+    <PackageReference Include="OrchardCore.Email.Abstractions" Version="2.1.6" />
+    <PackageReference Include="OrchardCore.ContentManagement.Abstractions" Version="2.1.6" />
+    <PackageReference Include="OrchardCore.Data.Abstractions" Version="2.1.6" />
+    <PackageReference Include="OrchardCore.ContentManagement.Display" Version="2.1.6" />
+    <PackageReference Include="OrchardCore.Media.Core" Version="2.1.6" />
+    <PackageReference Include="OrchardCore.Contents" Version="2.1.6" />
+
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Views\Gallery\Album.cshtml" />
+    <Content Include="Views\Gallery\Index.cshtml" />
+    <Content Include="Views\Gallery\Photo.cshtml" />
+    <Content Include="Views\Gallery\Upload.cshtml" />
+    <Content Include="Views\_ViewImports.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,28 @@
+﻿@model IEnumerable<OrchardCore.ContentManagement.ContentItem>
+
+<h1>Photo Albums</h1>
+
+<div class="row">
+    @foreach (var album in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">@album.DisplayText</h5>
+                    @if (album.Content.AlbumPart?.Description != null)
+                    {
+                        <p class="card-text">@album.Content.AlbumPart.Description</p>
+                    }
+                    <a asp-action="Album" asp-route-albumId="@album.ContentItemId" class="btn btn-primary">View Album</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="mt-4">
+        <a asp-action="Upload" class="btn btn-success">Upload New Photo</a>
+    </div>
+}   

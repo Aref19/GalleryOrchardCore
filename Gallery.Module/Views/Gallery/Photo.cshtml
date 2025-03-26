@@ -1,0 +1,41 @@
+﻿@model OrchardCore.ContentManagement.ContentItem
+
+<div class="container">
+    <h1>@Model.DisplayText</h1>
+
+    <div class="row">
+        <div class="col-md-8">
+            @if (Model.Content.PhotoPart?.ImageMediaPath != null)
+            {
+                <img class="img-fluid" src="@Url.Content(Model.Content.PhotoPart.ImageMediaPath)" alt="@Model.DisplayText">
+            }
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Details</h5>
+                    
+                    @if (Model.Content.PhotoPart?.Tags != null && Model.Content.PhotoPart.Tags.Count > 0)
+                    {
+                        <h6>Tags:</h6>
+                        <p>
+                            @foreach (var tag in Model.Content.PhotoPart.Tags)
+                            {
+                                <span class="badge bg-secondary me-1">@tag</span>
+                            }
+                        </p>
+                    }
+                    
+                    @if (Model.Content.PhotoPart?.AlbumContentItemId != null)
+                    {
+                        <p>
+                            <a asp-action="Album" asp-route-albumId="@Model.Content.PhotoPart.AlbumContentItemId" class="btn btn-primary">Back to Album</a>
+                        </p>
+                    }
+                    
+                    <a asp-action="Index" class="btn btn-secondary">Back to Albums</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

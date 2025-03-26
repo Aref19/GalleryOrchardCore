@@ -1,0 +1,47 @@
+﻿@model Gallery.Module.Controllers.PhotoUploadViewModel
+
+@{
+    ViewData["Title"] = "Upload Photo";
+}
+
+<h1>Upload Photo</h1>
+
+<!-- Zeige alle Validierungsfehler oben -->
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<form asp-action="Upload" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label">Photo Title</label>
+        <input asp-for="Title" class="form-control" required />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ImageFile" class="form-label">Select Image</label>
+        <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" required />
+        <span asp-validation-for="ImageFile" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="AlbumId" class="form-label">Album</label>
+        <select asp-for="AlbumId" class="form-select" required>
+            <option value="">-- Select Album --</option>
+            @foreach (var album in Model.Albums)
+            {
+                <option value="@album.ContentItemId">@album.DisplayText</option>
+            }
+        </select>
+        <span asp-validation-for="AlbumId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Tags" class="form-label">Tags (comma separated)</label>
+        <input asp-for="Tags" class="form-control" placeholder="nature, landscape, etc." />
+        <span asp-validation-for="Tags" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Upload Photo</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+

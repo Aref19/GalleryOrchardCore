@@ -1,0 +1,12 @@
+# .NET Core build artifacts
+bin/
+obj/
+*.user
+*.suo
+
+# Orchard Core specific
+App_Data/
+
+# IDE files
+.vs/
+.idea/
