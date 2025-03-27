@@ -1,7 +1,7 @@
 ﻿@model Gallery.Module.Controllers.AlbumViewModel
 
 
-<pre>Photos count: @Model.Photos?.Count()</pre>
+
 <h1>@Model.Album.DisplayText</h1>
 
 @if (Model.Album.Content.AlbumPart?.Description != null)
@@ -16,7 +16,7 @@
             <div class="card">
                 @if (photo.Content.PhotoPart?.ImageMediaPath != null)
                 {
-                    <p>Path: @photo.Content.PhotoPart.ImageMediaPath</p>
+                    
                     <img class="card-img-top"
                          src="@Url.Content("~/Media" + (string)photo.Content.PhotoPart.ImageMediaPath)"
                          alt="@photo.DisplayText" />

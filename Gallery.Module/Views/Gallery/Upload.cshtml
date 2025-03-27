@@ -24,13 +24,23 @@
 
     <div class="mb-3">
         <label asp-for="AlbumId" class="form-label">Album</label>
-        <select asp-for="AlbumId" class="form-select" required>
-            <option value="">-- Select Album --</option>
-            @foreach (var album in Model.Albums)
-            {
-                <option value="@album.ContentItemId">@album.DisplayText</option>
-            }
-        </select>
+        @if (ViewBag.SingleAlbumMode == true)
+        {
+            <input type="hidden" asp-for="AlbumId" />
+            <p class="form-control-static">
+                @Model.Albums.FirstOrDefault(a => a.ContentItemId == Model.AlbumId)?.DisplayText
+            </p>
+        }
+        else
+        {
+            <select asp-for="AlbumId" class="form-select" required>
+                <option value="">-- Select Album --</option>
+                @foreach (var album in Model.Albums)
+                {
+                    <option value="@album.ContentItemId">@album.DisplayText</option>
+                }
+            </select>
+        }
         <span asp-validation-for="AlbumId" class="text-danger"></span>
     </div>
 
@@ -43,5 +53,3 @@
     <button type="submit" class="btn btn-primary">Upload Photo</button>
     <a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>
-
-

@@ -70,20 +70,26 @@ namespace Gallery.Module.Controllers
 
         // GET: /Gallery/Upload
         [Authorize]
-        public async Task<IActionResult> Upload()
+        [HttpGet] // Add this explicit attribute
+        public async Task<IActionResult> Upload(string albumId = null)
         {
             var albums = await _galleryService.GetAlbumsAsync();
             var viewModel = new PhotoUploadViewModel
             {
-                Albums = albums
+                Albums = albums,
+                AlbumId = albumId // Pre-select the album if provided
             };
+
+            // Set a flag to indicate a specific album was selected
+            ViewBag.SingleAlbumMode = !string.IsNullOrEmpty(albumId);
 
             return View(viewModel);
         }
 
-        // POST: /Gallery/Upload
-        [HttpPost]
+// POST: /Gallery/Upload
+        [HttpPost] // This should already be here
         [Authorize]
+        [ValidateAntiForgeryToken] // Add this for security
         public async Task<IActionResult> Upload(PhotoUploadViewModel model)
         {
             Console.WriteLine("model.ImageFile " +model.ImageFile );
@@ -115,7 +121,7 @@ namespace Gallery.Module.Controllers
             var photoPart = photoContentItem.As<PhotoPart>();
          
             if (photoPart != null)
-            {
+            { 
                 // Save the uploaded image to media storage
                 if (model.ImageFile != null && model.ImageFile.Length > 0)
                 {
@@ -151,8 +157,10 @@ namespace Gallery.Module.Controllers
                 photoPart.AlbumContentItemId = model.AlbumId;
                 photoContentItem.Apply(photoPart);
                 Console.WriteLine("model.AlbumId: " + model.AlbumId);
+                Console.WriteLine("testEmailCp");
                 Console.WriteLine("Assigned AlbumContentItemId: " + photoPart.AlbumContentItemId);
                 Console.WriteLine("model.AlbumId:" + model.AlbumId);
+                Console.WriteLine("testEmailCp");
                 // Handle tags
                 if (!string.IsNullOrWhiteSpace(model.Tags))
                 {
@@ -162,13 +170,15 @@ namespace Gallery.Module.Controllers
                     );
                 }
             }
-            
+          
             // Publish the content item
+            Console.WriteLine("testEmailCp");
             await _contentManager.CreateAsync(photoContentItem, VersionOptions.Published);
             
             // Send notification to other users
+            Console.WriteLine("testEmailC");
             await _notificationService.NotifyNewPhotoUploadedAsync(photoContentItem.ContentItemId);
-            
+            Console.WriteLine("testEmailC");
             // Redirect to the album page
             return RedirectToAction(nameof(Album), new { albumId = model.AlbumId });
         }

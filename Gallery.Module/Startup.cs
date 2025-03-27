@@ -10,8 +10,14 @@ namespace Gallery.Module;
 
 public sealed class Startup : StartupBase
 {
+    
+    
+    
     public override void ConfigureServices(IServiceCollection services)
     {
+        
+        
+     
         // Register content parts
         services.AddContentPart<Models.AlbumPart>();
         services.AddContentPart<Models.PhotoPart>();
@@ -26,21 +32,27 @@ public sealed class Startup : StartupBase
 
     public override void Configure(IApplicationBuilder builder, IEndpointRouteBuilder routes, IServiceProvider serviceProvider)
     {
-        // Register routes for your controllers
+        // Add this route for the homepage
+        routes.MapAreaControllerRoute(
+            name: "Home",
+            areaName: "Gallery.Module",
+            pattern: "/",
+            defaults: new { controller = "Gallery", action = "Index" }
+        );
+
+        // Keep your existing routes
         routes.MapAreaControllerRoute(
             name: "GalleryHome",
             areaName: "Gallery.Module",
             pattern: "Gallery",
             defaults: new { controller = "Gallery", action = "Index" }
         );
-    
+
         routes.MapAreaControllerRoute(
             name: "GalleryUpload",
             areaName: "Gallery.Module",
             pattern: "Gallery/Upload",
             defaults: new { controller = "Gallery", action = "Upload" }
         );
-    
-        
     }
 }
