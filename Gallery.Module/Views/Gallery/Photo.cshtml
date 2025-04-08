@@ -5,34 +5,48 @@
 
     <div class="row">
         <div class="col-md-8">
-            @if (Model.Content.PhotoPart?.ImageMediaPath != null)
-            {
-                <img class="img-fluid" src="@Url.Content(Model.Content.PhotoPart.ImageMediaPath)" alt="@Model.DisplayText">
+            @{
+                
+                    var photoPart = Model.Content.PhotoPart;
+                // Sicherstellen, dass ImageMediaPath ein String ist
+                var imagePath = Model.Content.PhotoPart?.ImageMediaPath as string;
+       
+        
+                    
+                <img class="card-img-top"
+                     src="@Url.Content("~/Media" + (string)Model.Content.PhotoPart.ImageMediaPath)"
+                     alt="@Model.DisplayText" />
+            
+    
             }
         </div>
+
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Details</h5>
-                    
-                    @if (Model.Content.PhotoPart?.Tags != null && Model.Content.PhotoPart.Tags.Count > 0)
+
+                    @if (Model.Content.PhotoPart?.Tags is List<string> tags && tags.Any())
                     {
                         <h6>Tags:</h6>
                         <p>
-                            @foreach (var tag in Model.Content.PhotoPart.Tags)
+                            @foreach (var tag in tags)
                             {
                                 <span class="badge bg-secondary me-1">@tag</span>
                             }
                         </p>
                     }
-                    
-                    @if (Model.Content.PhotoPart?.AlbumContentItemId != null)
+
+                    @{
+                        var albumId = Model.Content.PhotoPart?.AlbumContentItemId as string;
+                    }
+                    @if (!string.IsNullOrEmpty(albumId))
                     {
                         <p>
-                            <a asp-action="Album" asp-route-albumId="@Model.Content.PhotoPart.AlbumContentItemId" class="btn btn-primary">Back to Album</a>
+                            <a asp-action="Album" asp-route-albumId="@albumId" class="btn btn-primary">Back to Album</a>
                         </p>
                     }
-                    
+
                     <a asp-action="Index" class="btn btn-secondary">Back to Albums</a>
                 </div>
             </div>

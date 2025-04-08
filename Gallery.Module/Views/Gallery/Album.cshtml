@@ -1,13 +1,11 @@
 ﻿@model Gallery.Module.Controllers.AlbumViewModel
 
-
-
 <h1>@Model.Album.DisplayText</h1>
-
-@if (Model.Album.Content.AlbumPart?.Description != null)
+@if (Model.Album?.ContentItem.Content.MyCustomAlbumPart?.Description != null)
 {
-    <p class="lead">@Model.Album.Content.AlbumPart.Description</p>
+    <p class="lead">@Model.Album?.ContentItem.Content.MyCustomAlbumPart?.Description.Text</p>
 }
+
 
 <div class="row">
     @foreach (var photo in Model.Photos)
