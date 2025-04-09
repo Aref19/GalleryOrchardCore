@@ -1,3 +1,4 @@
+using Gallery.Module.Migrations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
@@ -5,6 +6,7 @@ using OrchardCore.Modules;
 using OrchardCore.ContentManagement;
 using OrchardCore.ContentManagement.Display.ContentDisplay;
 using Gallery.Module.Models;
+using OrchardCore.Data.Migration;
 
 namespace Gallery.Module;
 
@@ -24,8 +26,8 @@ public sealed class Startup : StartupBase
     
         // Register migrations for setting up content types
         services.AddScoped<OrchardCore.Data.Migration.IDataMigration, Migrations.GalleryMigrations>();
-    
-        // Register services for your module
+        
+
         services.AddScoped<Services.IGalleryService, Services.GalleryService>();
         services.AddScoped<Services.IPhotoNotificationService, Services.EmailNotificationService>();
     }

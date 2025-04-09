@@ -1,9 +1,9 @@
 ﻿@model Gallery.Module.Controllers.AlbumViewModel
 
 <h1>@Model.Album.DisplayText</h1>
-@if (Model.Album?.ContentItem.Content.MyCustomAlbumPart?.Description != null)
+@if (Model.Album?.ContentItem.Content.AlbumPart?.Description != null)
 {
-    <p class="lead">@Model.Album?.ContentItem.Content.MyCustomAlbumPart?.Description.Text</p>
+    <p class="lead">@Model.Album?.ContentItem.Content.AlbumPart?.Description.Text</p>
 }
 
 
@@ -21,15 +21,7 @@
                 }
                 <div class="card-body">
                     <h5 class="card-title">@photo.DisplayText</h5>
-                    @if (photo.Content.PhotoPart?.Tags != null)
-                    {
-                        <p>
-                            @foreach (var tag in photo.Content.PhotoPart.Tags)
-                            {
-                                <span class="badge bg-secondary me-1">@tag</span>
-                            }
-                        </p>
-                    }
+                  
                     <a asp-action="Photo" asp-route-photoId="@photo.ContentItemId" class="btn btn-primary">View Photo</a>
                 </div>
             </div>

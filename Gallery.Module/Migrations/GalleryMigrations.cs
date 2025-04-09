@@ -1,7 +1,10 @@
 ﻿using OrchardCore.ContentManagement.Metadata;
 using OrchardCore.ContentManagement.Metadata.Settings;
 using OrchardCore.Data.Migration;
+
+using System;
 using System.Threading.Tasks;
+
 namespace Gallery.Module.Migrations
 {
     public class GalleryMigrations : DataMigration
@@ -11,20 +14,33 @@ namespace Gallery.Module.Migrations
         public GalleryMigrations(IContentDefinitionManager contentDefinitionManager)
         {
             _contentDefinitionManager = contentDefinitionManager;
+            CreateAsync();
         }
 
         public async Task<int> CreateAsync()
         {
-            // Define AlbumPart
-            await _contentDefinitionManager.AlterPartDefinitionAsync("AlbumPart", part =>
-                part.Attachable()
-            );
-
             // Define PhotoPart
-            await _contentDefinitionManager.AlterPartDefinitionAsync("PhotoPart", part =>
-                part.Attachable()
+            await _contentDefinitionManager.AlterPartDefinitionAsync("PhotoPart", part => part
+                .WithDisplayName("PhotoPart")
+                .WithField("Tags", field => field
+                    .OfType("TextField")
+                    .WithDisplayName("Tags")
+                )
+                .WithDescription("Tags for the photo")
+                .Attachable()
             );
 
+            // Define AlbumPart
+            await _contentDefinitionManager.AlterPartDefinitionAsync("AlbumPart", part => part
+                .WithDisplayName("AlbumPart")
+                .Attachable()
+                .WithField("Description", field => field
+                    .OfType("TextField")
+                    .WithDisplayName("Description")
+                )
+                .WithDescription("Description for the album")
+            );
+            
             // Create Album content type
             await _contentDefinitionManager.AlterTypeDefinitionAsync("Album", type => type
                 .DisplayedAs("Album")
@@ -47,8 +63,7 @@ namespace Gallery.Module.Migrations
                 .WithPart("PhotoPart")
             );
 
-            return 1;
+            return 1; // Version 1 für die erste Installation
         }
     }
-
 }

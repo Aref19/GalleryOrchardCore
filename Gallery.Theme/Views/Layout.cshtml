@@ -1,0 +1,42 @@
+@inject OrchardCore.Settings.ISiteService SiteService
+@if(User!=null){
+    @T["Hallo,{0}",User.Identity.Name]
+}
+
+@{
+    var cultureName = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var cultureDir = System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "rtl" : "ltr";
+    var siteSettings = await SiteService.GetSiteSettingsAsync();
+    var siteName = siteSettings.SiteName;
+}
+<!DOCTYPE html>
+
+<html lang="@cultureName">
+<head>
+    <meta charset="utf-8">
+    <title>@siteName</title>
+    <link rel="stylesheet" href="@Url.Content("~/Gallery.Theme/Assets/gallery-theme.css")" />
+    @await RenderSectionAsync("Meta", required: false)
+
+    <!-- INSERT REQUIRED RESOURCES HERE -->
+
+    <!-- Resources -->
+    <style asp-name="gallery-theme" version="1.0.0"></style>
+    <resources type="Meta" />
+    <resources type="HeadLink" />
+    <resources type="Stylesheet" />
+    <resources type="HeadScript" />
+</head>
+<body dir="@cultureDir">
+@{
+@await RenderBodyAsync()
+}
+<footer>
+    @await RenderSectionAsync("Footer", required: false)
+</footer>
+
+<!-- Scripts -->
+<script asp-name="jquery" at="Foot"></script>
+<resources type="FootScript" />
+</body>
+</html>

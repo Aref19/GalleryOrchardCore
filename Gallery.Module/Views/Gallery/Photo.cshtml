@@ -1,4 +1,6 @@
 ﻿@model OrchardCore.ContentManagement.ContentItem
+@using System.Text.Json
+@using System.Text.Json.Nodes
 
 <div class="container">
     <h1>@Model.DisplayText</h1>
@@ -6,18 +8,9 @@
     <div class="row">
         <div class="col-md-8">
             @{
-                
-                    var photoPart = Model.Content.PhotoPart;
-                // Sicherstellen, dass ImageMediaPath ein String ist
-                var imagePath = Model.Content.PhotoPart?.ImageMediaPath as string;
-       
-        
-                    
                 <img class="card-img-top"
                      src="@Url.Content("~/Media" + (string)Model.Content.PhotoPart.ImageMediaPath)"
                      alt="@Model.DisplayText" />
-            
-    
             }
         </div>
 
@@ -25,17 +18,64 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Details</h5>
-
-                    @if (Model.Content.PhotoPart?.Tags is List<string> tags && tags.Any())
+               
+                  
+                    @if (Model.Content.PhotoPart?.Tags != null)
                     {
                         <h6>Tags:</h6>
                         <p>
-                            @foreach (var tag in tags)
+                            @try
                             {
-                                <span class="badge bg-secondary me-1">@tag</span>
+         
+                                var json = System.Text.Json.JsonSerializer.Serialize(Model.Content.PhotoPart.Tags);
+            
+                                var doc = System.Text.Json.JsonDocument.Parse(json);
+                                var root = doc.RootElement;
+
+                    
+                                    if (root.ValueKind == JsonValueKind.Array)
+                                        {
+                                            var tagsList = new List<string>();
+
+                        
+                                            foreach (var element in root.EnumerateArray())
+                                                {
+                                                var tag = element.GetString();
+                                                if (!string.IsNullOrWhiteSpace(tag))
+                                                    {
+                                                        tagsList.Add(tag);
+                                                    }
+                                            }
+
+                            // Überprüfen, ob es Tags gibt
+                            if (tagsList.Any())
+                            {
+                                foreach (var tag in tagsList)
+                                {
+                                    <span class="badge bg-secondary me-1">@tag</span>
+                                }
                             }
+                            else
+                            {
+                                <span class="text-warning">Keine Tags gefunden.</span>
+                            }
+                        }
+                        else
+                        {
+                            <span class="text-warning">Das Tags-Array ist nicht im richtigen Format.</span>
+                        }
+                        }
+                        catch (Exception ex)
+                        {
+                            <span class="text-danger">Fehler beim Anzeigen der Tags: @ex.Message</span>
+                        }
                         </p>
                     }
+                    else
+                    {
+                        <span class="text-warning">Die Tags sind null.</span>
+                    }
+
 
                     @{
                         var albumId = Model.Content.PhotoPart?.AlbumContentItemId as string;

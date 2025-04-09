@@ -110,6 +110,7 @@ namespace Gallery.Module.Controllers
                 model.Albums = await _galleryService.GetAlbumsAsync();
                 return View(model);
             }
+    
 
             // Handle file upload
             var photoContentItem = await _contentManager.NewAsync("Photo");
@@ -161,7 +162,7 @@ namespace Gallery.Module.Controllers
                 Console.WriteLine("Assigned AlbumContentItemId: " + photoPart.AlbumContentItemId);
                 Console.WriteLine("model.AlbumId:" + model.AlbumId);
                 Console.WriteLine("testEmailCp");
-                // Handle tags
+               
                 if (!string.IsNullOrWhiteSpace(model.Tags))
                 {
                     photoPart.Tags = new List<string>(
@@ -169,6 +170,8 @@ namespace Gallery.Module.Controllers
                         .Select(t => t.Trim())
                     );
                 }
+                photoContentItem.Apply(photoPart);
+                Console.WriteLine("Tags: " +photoPart.Tags[0]);
             }
           
             // Publish the content item

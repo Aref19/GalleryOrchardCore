@@ -9,10 +9,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">@album.DisplayText</h5>
-                    @if (album.Content.AlbumPart?.Description != null)
-                    {
-                        <p class="card-text">@album.Content.AlbumPart.Description</p>
-                    }
+                  
                     <a asp-action="Album" asp-route-albumId="@album.ContentItemId" class="btn btn-primary">View Album</a>
                 </div>
             </div>
