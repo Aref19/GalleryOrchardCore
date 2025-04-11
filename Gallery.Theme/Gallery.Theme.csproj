@@ -16,6 +16,20 @@
     <PackageReference Include="OrchardCore.ContentManagement" Version="2.1.6" />
     <PackageReference Include="OrchardCore.DisplayManagement" Version="2.1.6" />
     <PackageReference Include="OrchardCore.ResourceManagement" Version="2.1.6" />
+    <PackageReference Include="OrchardCore.Title" Version="2.1.6" />
+    <PackageReference Include="OrchardCore.ResourceManagement" Version="2.1.6"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <RazorGenerate Remove="Views\TitlePart\Album.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="wwwroot\site.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\wwwroot\" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,8 @@
-@inject OrchardCore.Settings.ISiteService SiteService
+@inject OrchardCore.Settings.ISiteService SiteService;
+
+@inject OrchardCore.ResourceManagement.IResourceManager ResourceManager
+
+
 @if(User!=null){
     @T["Hallo,{0}",User.Identity.Name]
 }
@@ -15,18 +19,275 @@
 <head>
     <meta charset="utf-8">
     <title>@siteName</title>
-    <link rel="stylesheet" href="@Url.Content("~/Gallery.Theme/Assets/gallery-theme.css")" />
+
     @await RenderSectionAsync("Meta", required: false)
-
-    <!-- INSERT REQUIRED RESOURCES HERE -->
-
-    <!-- Resources -->
-    <style asp-name="gallery-theme" version="1.0.0"></style>
+ 
+ 
+    
     <resources type="Meta" />
     <resources type="HeadLink" />
     <resources type="Stylesheet" />
     <resources type="HeadScript" />
+    <style>
+        /* Album Container */
+        .album-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Album Header */
+        .album-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .album-header h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .album-description {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Photo Grid */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            justify-content: center;
+        }
+
+        /* Photo Card */
+        .photo-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .photo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+
+        .photo-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .photo-info {
+            padding: 15px;
+        }
+
+        .photo-title {
+            font-size: 1.2rem;
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+
+        .photo-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .tag {
+            background-color: #e9ecef;
+            color: #495057;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        /* Upload Form Styles */
+        .upload-form-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 25px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .upload-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.25);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .text-danger {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 5px;
+            display: block;
+        }
+
+        /* Albums Grid */
+        .albums-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .album-preview-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .album-preview-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+
+        .album-preview-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .album-preview-title {
+            font-size: 1.5rem;
+            margin: 0 0 15px 0;
+            color: #333;
+        }
+
+        .album-preview-description {
+            color: #666;
+            margin-bottom: 20px;
+            flex: 1;
+        }
+
+        .album-preview-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+
+        .upload-section {
+            text-align: center;
+            margin-top: 50px;
+            margin-bottom: 30px;
+        }
+
+
+        /* Verbesserte Button-Stile */
+        .view-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4a90e2;
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+
+        .view-button-back{
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .view-button:hover {
+            background-color: #3476c5;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            color: white;
+            text-decoration: none;
+        }
+
+        .upload-section {
+            text-align: center;
+            margin-top: 50px;
+            margin-bottom: 30px;
+        }
+
+        .upload-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background-color: #5cb85c;
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .upload-button:hover {
+            background-color: #4cae4c;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            color: white;
+            text-decoration: none;
+        }
+
+
+        .upload-button i {
+            margin-right: 8px;
+        }
+    </style>
+    
 </head>
+
 <body dir="@cultureDir">
 @{
 @await RenderBodyAsync()

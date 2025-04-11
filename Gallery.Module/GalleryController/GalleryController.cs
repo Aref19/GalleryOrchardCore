@@ -86,10 +86,10 @@ namespace Gallery.Module.Controllers
             return View(viewModel);
         }
 
-// POST: /Gallery/Upload
-        [HttpPost] // This should already be here
+
+        [HttpPost] 
         [Authorize]
-        [ValidateAntiForgeryToken] // Add this for security
+        [ValidateAntiForgeryToken] 
         public async Task<IActionResult> Upload(PhotoUploadViewModel model)
         {
             Console.WriteLine("model.ImageFile " +model.ImageFile );
@@ -112,18 +112,18 @@ namespace Gallery.Module.Controllers
             }
     
 
-            // Handle file upload
+            
             var photoContentItem = await _contentManager.NewAsync("Photo");
             
-            // Update title
+        
             photoContentItem.DisplayText = model.Title;
        
-            // Get the PhotoPart and update its properties
+      
             var photoPart = photoContentItem.As<PhotoPart>();
          
             if (photoPart != null)
             { 
-                // Save the uploaded image to media storage
+             
                 if (model.ImageFile != null && model.ImageFile.Length > 0)
                 {
                     var fileName = Path.GetFileName(model.ImageFile.FileName);
@@ -137,24 +137,23 @@ namespace Gallery.Module.Controllers
                     }
                     catch(Exception ex)
                     {
-                        // Log the exception or handle it appropriately
+                       
                         ModelState.AddModelError("", $"Could not create directory: {ex.Message}");
                         model.Albums = await _galleryService.GetAlbumsAsync();
                         return View(model);
                     }
                     
-                    // Save the file
+          
                     using (var stream = model.ImageFile.OpenReadStream())
                     {
                         await _mediaFileStore.CreateFileFromStreamAsync(path, stream);
                     }
-                    
-                    // Store the path in the PhotoPart
+            
                     photoPart.ImageMediaPath = path;
                  
                 }
                 
-                // Set album reference
+    
                 photoPart.AlbumContentItemId = model.AlbumId;
                 photoContentItem.Apply(photoPart);
                 Console.WriteLine("model.AlbumId: " + model.AlbumId);
@@ -174,20 +173,20 @@ namespace Gallery.Module.Controllers
                 Console.WriteLine("Tags: " +photoPart.Tags[0]);
             }
           
-            // Publish the content item
+     
             Console.WriteLine("testEmailCp");
             await _contentManager.CreateAsync(photoContentItem, VersionOptions.Published);
             
-            // Send notification to other users
+    
             Console.WriteLine("testEmailC");
             await _notificationService.NotifyNewPhotoUploadedAsync(photoContentItem.ContentItemId);
             Console.WriteLine("testEmailC");
-            // Redirect to the album page
+      
             return RedirectToAction(nameof(Album), new { albumId = model.AlbumId });
         }
     }
 
-    // View models
+
     public class AlbumViewModel
     {
         public ContentItem Album { get; set; }

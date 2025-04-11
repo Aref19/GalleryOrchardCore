@@ -19,7 +19,7 @@ namespace Gallery.Module.Migrations
 
         public async Task<int> CreateAsync()
         {
-            // Define PhotoPart
+       
             await _contentDefinitionManager.AlterPartDefinitionAsync("PhotoPart", part => part
                 .WithDisplayName("PhotoPart")
                 .WithField("Tags", field => field
@@ -30,7 +30,7 @@ namespace Gallery.Module.Migrations
                 .Attachable()
             );
 
-            // Define AlbumPart
+         
             await _contentDefinitionManager.AlterPartDefinitionAsync("AlbumPart", part => part
                 .WithDisplayName("AlbumPart")
                 .Attachable()
@@ -41,7 +41,7 @@ namespace Gallery.Module.Migrations
                 .WithDescription("Description for the album")
             );
             
-            // Create Album content type
+         
             await _contentDefinitionManager.AlterTypeDefinitionAsync("Album", type => type
                 .DisplayedAs("Album")
                 .Creatable()
@@ -52,7 +52,7 @@ namespace Gallery.Module.Migrations
                 .WithPart("AlbumPart")
             );
 
-            // Create Photo content type
+    
             await _contentDefinitionManager.AlterTypeDefinitionAsync("Photo", type => type
                 .DisplayedAs("Photo")
                 .Creatable()
@@ -63,7 +63,7 @@ namespace Gallery.Module.Migrations
                 .WithPart("PhotoPart")
             );
 
-            return 1; // Version 1 für die erste Installation
+            return 1; 
         }
     }
 }

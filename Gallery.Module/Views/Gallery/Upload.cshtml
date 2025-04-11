@@ -4,52 +4,61 @@
     ViewData["Title"] = "Upload Photo";
 }
 
-<h1>Upload Photo</h1>
-
-<!-- Zeige alle Validierungsfehler oben -->
-<div asp-validation-summary="All" class="text-danger"></div>
-
-<form asp-action="Upload" method="post" enctype="multipart/form-data">
-    <div class="mb-3">
-        <label asp-for="Title" class="form-label">Photo Title</label>
-        <input asp-for="Title" class="form-control" required />
-        <span asp-validation-for="Title" class="text-danger"></span>
+<div class="album-container">
+    <div class="album-header">
+        <h1>Upload Photo</h1>
+        <p class="album-description">Füge ein neues Foto zu deinem Album hinzu</p>
     </div>
 
-    <div class="mb-3">
-        <label asp-for="ImageFile" class="form-label">Select Image</label>
-        <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" required />
-        <span asp-validation-for="ImageFile" class="text-danger"></span>
-    </div>
+    <!-- Zeige alle Validierungsfehler oben -->
+    <div asp-validation-summary="All" class="text-danger"></div>
 
-    <div class="mb-3">
-        <label asp-for="AlbumId" class="form-label">Album</label>
-        @if (ViewBag.SingleAlbumMode == true)
-        {
-            <input type="hidden" asp-for="AlbumId" />
-            <p class="form-control-static">
-                @Model.Albums.FirstOrDefault(a => a.ContentItemId == Model.AlbumId)?.DisplayText
-            </p>
-        }
-        else
-        {
-            <select asp-for="AlbumId" class="form-select" required>
-                <option value="">-- Select Album --</option>
-                @foreach (var album in Model.Albums)
+    <div class="upload-form-container">
+        <form asp-action="Upload" method="post" enctype="multipart/form-data" class="upload-form">
+            <div class="form-group mb-3">
+                <label asp-for="Title" class="form-label">Photo Title</label>
+                <input asp-for="Title" class="form-control" required />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="ImageFile" class="form-label">Select Image</label>
+                <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" required />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="AlbumId" class="form-label">Album</label>
+                @if (ViewBag.SingleAlbumMode == true)
                 {
-                    <option value="@album.ContentItemId">@album.DisplayText</option>
+                    <input type="hidden" asp-for="AlbumId" />
+                    <p class="form-control-static">
+                        @Model.Albums.FirstOrDefault(a => a.ContentItemId == Model.AlbumId)?.DisplayText
+                    </p>
                 }
-            </select>
-        }
-        <span asp-validation-for="AlbumId" class="text-danger"></span>
-    </div>
+                else
+                {
+                    <select asp-for="AlbumId" class="form-select" required>
+                        <option value="">-- Select Album --</option>
+                        @foreach (var album in Model.Albums)
+                        {
+                            <option value="@album.ContentItemId">@album.DisplayText</option>
+                        }
+                    </select>
+                }
+                <span asp-validation-for="AlbumId" class="text-danger"></span>
+            </div>
 
-    <div class="mb-3">
-        <label asp-for="Tags" class="form-label">Tags (comma separated)</label>
-        <input asp-for="Tags" class="form-control" placeholder="nature, landscape, etc." />
-        <span asp-validation-for="Tags" class="text-danger"></span>
-    </div>
+            <div class="form-group mb-3">
+                <label asp-for="Tags" class="form-label">Tags (comma separated)</label>
+                <input asp-for="Tags" class="form-control" placeholder="nature, landscape, etc." />
+                <span asp-validation-for="Tags" class="text-danger"></span>
+            </div>
 
-    <button type="submit" class="btn btn-primary">Upload Photo</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary upload-button">Upload Photo</button>
+                <a asp-action="Index" class="btn btn-secondary view-button-back">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

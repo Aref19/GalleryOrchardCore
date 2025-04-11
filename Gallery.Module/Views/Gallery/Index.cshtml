@@ -1,25 +1,37 @@
 ﻿@model IEnumerable<OrchardCore.ContentManagement.ContentItem>
 
-<h1>Photo Albums</h1>
+<div class="album-container">
+    <div class="album-header">
+        <h1>Photo Albums</h1>
+        <p class="album-description">Entdecke unsere Sammlung von Fotoalben</p>
+    </div>
 
-<div class="row">
-    @foreach (var album in Model)
-    {
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">@album.DisplayText</h5>
-                  
-                    <a asp-action="Album" asp-route-albumId="@album.ContentItemId" class="btn btn-primary">View Album</a>
+    <div class="albums-grid">
+        @foreach (var album in Model)
+        {
+            <div class="album-preview-card">
+                <div class="album-preview-info">
+                    <h3 class="album-preview-title">@album.DisplayText</h3>
+
+                    @if (album.Content.AlbumPart?.Description != null)
+                    {
+                        <p class="album-preview-description">@album.Content.AlbumPart.Description.Text</p>
+                    }
+
+                    <div class="album-preview-actions">
+                        <a asp-action="Album" asp-route-albumId="@album.ContentItemId" class="view-button">View Album</a>
+                    </div>
                 </div>
             </div>
+        }
+    </div>
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="upload-section">
+            <a asp-action="Upload" class="upload-button">
+                <i class="fas fa-cloud-upload-alt"></i> Upload New Photo
+            </a>
         </div>
     }
 </div>
-
-@if (User.Identity.IsAuthenticated)
-{
-    <div class="mt-4">
-        <a asp-action="Upload" class="btn btn-success">Upload New Photo</a>
-    </div>
-}   

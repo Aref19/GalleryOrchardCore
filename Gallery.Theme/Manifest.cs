@@ -1,5 +1,6 @@
 using OrchardCore.DisplayManagement.Manifest;
 
+
 [assembly: Theme(
     Name = "Gallery Theme",
     Author = "Aref Obaid",
