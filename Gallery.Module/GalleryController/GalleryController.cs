@@ -4,8 +4,10 @@ using Gallery.Module.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using OrchardCore.ContentManagement;
+using OrchardCore.DisplayManagement.Notify;
 using OrchardCore.Media;
 
 namespace Gallery.Module.Controllers
@@ -16,17 +18,23 @@ namespace Gallery.Module.Controllers
         private readonly IGalleryService _galleryService;
         private readonly IPhotoNotificationService _notificationService;
         private readonly IMediaFileStore _mediaFileStore;
+        private readonly INotifier _notifier;
+        private readonly IHtmlLocalizer<GalleryController> _htmlLocalizer;
 
         public GalleryController(
             IContentManager contentManager,
             IGalleryService galleryService,
             IPhotoNotificationService notificationService,
-            IMediaFileStore mediaFileStore)
+            IMediaFileStore mediaFileStore,
+            INotifier notifier,
+            IHtmlLocalizer<GalleryController> htmlLocalizer)
         {
             _contentManager = contentManager;
             _galleryService = galleryService;
             _notificationService = notificationService;
             _mediaFileStore = mediaFileStore;
+            _notifier = notifier;
+            _htmlLocalizer = htmlLocalizer; 
         }
 
         // GET: /Gallery
@@ -180,6 +188,7 @@ namespace Gallery.Module.Controllers
     
             Console.WriteLine("testEmailC");
             await _notificationService.NotifyNewPhotoUploadedAsync(photoContentItem.ContentItemId);
+
             Console.WriteLine("testEmailC");
       
             return RedirectToAction(nameof(Album), new { albumId = model.AlbumId });
