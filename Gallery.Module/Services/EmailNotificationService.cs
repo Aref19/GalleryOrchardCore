@@ -70,13 +70,14 @@ namespace Gallery.Module.Services
                         Console.WriteLine($"⚠️ User has no email.");
                         continue;
                     }
-
+                    var link = $"https://localhost:5001/Gallery.Module/Gallery/Photo?photoId={photo.ContentItemId}";
                     var subject = $"📸 New photo uploaded: {photo.DisplayText}";
                     var body = $@"
                         <h2>New Photo Uploaded</h2>
                         <p>A new photo was uploaded to the album <strong>{album.DisplayText}</strong>.</p>
                         <p><strong>Photo:</strong> {photo.DisplayText}</p>
-                        <p><a href='/Gallery/Photo/{photoId}'>Click here to view</a></p>";
+                        <p><a href='{link}'>Click here to view</a></p>;
+";
 
                     var result = await _emailService.SendAsync(email, subject, body);
 
@@ -86,6 +87,7 @@ namespace Gallery.Module.Services
                         {
                             Console.WriteLine($"❌ Failed to send to {email}:  - {error.Value}");
                         }
+
                         Console.WriteLine($"❌ Failed to send to {email}: {string.Join(", ", result.Errors)}");
                     }
                     else

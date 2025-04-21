@@ -284,6 +284,93 @@
         .upload-button i {
             margin-right: 8px;
         }
+
+        /* Photo Detail Styles */
+        .photo-detail-image img {
+            width: 800px;
+            height: 800px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+            max-width: none; /* Verhindert, dass das Bild durch max-width des Containers begrenzt wird */
+        }
+
+        .photo-detail-image {
+            width: auto;
+            max-width: 100%;
+            overflow: auto; /* Erlaubt Scrollen, wenn das Bild größer als der Container ist */
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: white;
+        }
+
+        .photo-detail-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+       
+        }
+
+        .photo-actions {
+            margin-top: 25px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Text Styles */
+        .text-warning {
+            color: #ffc107;
+            font-size: 0.875rem;
+            margin-top: 5px;
+            display: block;
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-block;
+            font-weight: 400;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            user-select: none;
+            border: 1px solid transparent;
+            padding: 0.375rem 0.75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: 0.25rem;
+            transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+            border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            color: #fff;
+            background-color: #0069d9;
+            border-color: #0062cc;
+        }
+
+        .btn-secondary {
+            color: #fff;
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            color: #fff;
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
     </style>
     
 </head>
