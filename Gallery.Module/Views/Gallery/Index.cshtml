@@ -34,4 +34,14 @@
             </a>
         </div>
     }
+    else
+    {
+        <div class="upload-section">
+            <p>You need to be logged in to upload photos.</p>
+            <a asp-controller="Account" asp-action="Login" class="upload-button">Login</a>
+            <a asp-controller="Account" asp-action="Register" class="upload-button">
+               Register
+            </a>
+        </div>
+    }
 </div>

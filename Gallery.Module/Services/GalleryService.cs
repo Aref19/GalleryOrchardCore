@@ -74,13 +74,13 @@ namespace Gallery.Module.Services
 
             foreach (var photo in photos)
             {
-                Console.WriteLine($"📸 Photo: {photo.DisplayText}, AlbumRef: {photo.Content.PhotoPart?.AlbumContentItemId}");
+                Console.WriteLine($" Photo: {photo.DisplayText}, AlbumRef: {photo.Content.PhotoPart?.AlbumContentItemId}");
             }
             var results = photos
                 .Where(photo => photo.Content.PhotoPart?.AlbumContentItemId == albumId)
                 .ToList();
 
-            Console.WriteLine($"✅ Gefundene Fotos für Album {albumId}: {results.Count}");
+            Console.WriteLine($"Gefundene Fotos für Album {albumId}: {results.Count}");
 
             return results;
         }

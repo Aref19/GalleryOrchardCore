@@ -54,7 +54,7 @@ namespace Gallery.Module.Services
                     return;
                 }
 
-                // Query for users directly using YesSql
+                // Query for users
                 var users = await _session
                     .Query<User, UserIndex>()
                     .ListAsync();
@@ -63,7 +63,7 @@ namespace Gallery.Module.Services
 
                 foreach (var user in users)
                 {
-                    // Get the email directly from the User object
+                    // Get the email 
                     var email = user.Email;
                     if (string.IsNullOrEmpty(email))
                     {
@@ -85,10 +85,10 @@ namespace Gallery.Module.Services
                     {
                         foreach (var error in result.Errors)
                         {
-                            Console.WriteLine($"❌ Failed to send to {email}:  - {error.Value}");
+                            Console.WriteLine($" Failed to send to {email}:  - {error.Value}");
                         }
 
-                        Console.WriteLine($"❌ Failed to send to {email}: {string.Join(", ", result.Errors)}");
+                        Console.WriteLine($" Failed to send to {email}: {string.Join(", ", result.Errors)}");
                     }
                     else
                     {
@@ -100,8 +100,8 @@ namespace Gallery.Module.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine("🚨 Exception while sending email: " + ex.Message);
-                Console.WriteLine("🚨 Exception details: " + ex.StackTrace);
+                Console.WriteLine(" Exception while sending email: " + ex.Message);
+                Console.WriteLine(" Exception details: " + ex.StackTrace);
             }
         }
     }
