@@ -3,10 +3,23 @@
 <div class="album-container">
     <div class="album-header">
         <h1>@Model.Album.DisplayText</h1>
-        @if (Model.Album?.ContentItem.Content.AlbumPart?.Description != null)
-        {
-            <p class="album-description">@Model.Album?.ContentItem.Content.AlbumPart?.Description.Text</p>
+
+
+        @{
+            try
+            {
+                var description = (string?)Model?.Album?.Content?.AlbumPart?.Description?.Text;
+                if (!string.IsNullOrWhiteSpace(description))
+                {
+                    <p class="album-preview-description">@description</p>
+                }
+            }
+            catch
+            {
+                // Beschreibung ist ungültig oder falsch formatiert – einfach ignorieren
+            }
         }
+        
     </div>
 
     @if (User.Identity.IsAuthenticated)
@@ -47,7 +60,9 @@
                         </div>
                     }
 
-                    <a asp-action="Photo" asp-route-photoId="@photo.ContentItemId" class="btn btn-primary mt-2 view-button">View Photo</a>
+                    <a asp-action="Photo" asp-route-photoId="@photo.ContentItemId" class="btn btn-primary mt-2 view-button">
+                        View Photo
+                    </a>
                 </div>
             </div>
         }

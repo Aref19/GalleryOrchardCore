@@ -13,9 +13,19 @@
                 <div class="album-preview-info">
                     <h3 class="album-preview-title">@album.DisplayText</h3>
 
-                    @if (album.Content.AlbumPart?.Description != null)
-                    {
-                        <p class="album-preview-description">@album.Content.AlbumPart.Description.Text</p>
+                    @{
+                        try
+                        {
+                            var description = album.Content?.AlbumPart?.Description?.Text;
+                            if (!string.IsNullOrWhiteSpace(description))
+                            {
+                                <p class="album-preview-description">@description</p>
+                            }
+                        }
+                        catch
+                        {
+                            // Beschreibung ist ungültig oder falsch formatiert – einfach ignorieren
+                        }
                     }
 
                     <div class="album-preview-actions">

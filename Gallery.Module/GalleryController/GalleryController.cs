@@ -37,6 +37,7 @@ namespace Gallery.Module.Controllers
             _htmlLocalizer = htmlLocalizer; 
         }
 
+        // Lists all albums in the gallery
         // GET: /Gallery
         public async Task<IActionResult> Index()
         {
@@ -44,6 +45,7 @@ namespace Gallery.Module.Controllers
             return View(albums);
         }
 
+        // Displays a specific album and its photos
         // GET: /Gallery/Album/{albumId}
         public async Task<IActionResult> Album(string albumId)
         {
@@ -64,6 +66,7 @@ namespace Gallery.Module.Controllers
             return View(viewModel);
         }
 
+        // Displays a specific photo
         // GET: /Gallery/Photo/{photoId}
         public async Task<IActionResult> Photo(string photoId)
         {
@@ -76,9 +79,10 @@ namespace Gallery.Module.Controllers
             return View(photo);
         }
 
+        // Displays the photo upload form
         // GET: /Gallery/Upload
         [Authorize]
-        [HttpGet] // Add this explicit attribute
+        [HttpGet]
         public async Task<IActionResult> Upload(string albumId = null)
         {
             var albums = await _galleryService.GetAlbumsAsync();
@@ -94,7 +98,7 @@ namespace Gallery.Module.Controllers
             return View(viewModel);
         }
 
-
+        // Processes the photo upload submission
         [HttpPost] 
         [Authorize]
         [ValidateAntiForgeryToken] 
@@ -102,7 +106,7 @@ namespace Gallery.Module.Controllers
         {
             Console.WriteLine("model.ImageFile " +model.ImageFile );
             
-            
+            // Log model validation errors for debugging
             foreach (var error in ModelState)
             {
                 Console.WriteLine($"ModelState Key: {error.Key}");
@@ -119,19 +123,18 @@ namespace Gallery.Module.Controllers
                 return View(model);
             }
     
-
-            
+            // Create a new Photo content item
             var photoContentItem = await _contentManager.NewAsync("Photo");
             
-        
+            // Set the display text (title) of the photo
             photoContentItem.DisplayText = model.Title;
        
-      
+            // Get the photo part from the content item
             var photoPart = photoContentItem.As<PhotoPart>();
          
             if (photoPart != null)
             { 
-             
+                // Process and save the uploaded image
                 if (model.ImageFile != null && model.ImageFile.Length > 0)
                 {
                     var fileName = Path.GetFileName(model.ImageFile.FileName);
@@ -145,23 +148,21 @@ namespace Gallery.Module.Controllers
                     }
                     catch(Exception ex)
                     {
-                       
                         ModelState.AddModelError("", $"Could not create directory: {ex.Message}");
                         model.Albums = await _galleryService.GetAlbumsAsync();
                         return View(model);
                     }
                     
-          
+                    // Save the file to the media store
                     using (var stream = model.ImageFile.OpenReadStream())
                     {
                         await _mediaFileStore.CreateFileFromStreamAsync(path, stream);
                     }
             
                     photoPart.ImageMediaPath = path;
-                 
                 }
                 
-    
+                // Link the photo to the selected album
                 photoPart.AlbumContentItemId = model.AlbumId;
                 photoContentItem.Apply(photoPart);
                 Console.WriteLine("model.AlbumId: " + model.AlbumId);
@@ -170,6 +171,7 @@ namespace Gallery.Module.Controllers
                 Console.WriteLine("model.AlbumId:" + model.AlbumId);
                 Console.WriteLine("testEmailCp");
                
+                // Process tags if provided
                 if (!string.IsNullOrWhiteSpace(model.Tags))
                 {
                     photoPart.Tags = new List<string>(
@@ -181,16 +183,17 @@ namespace Gallery.Module.Controllers
                 Console.WriteLine("Tags: " +photoPart.Tags[0]);
             }
           
-     
+            // Save the content item as published
             Console.WriteLine("testEmailCp");
             await _contentManager.CreateAsync(photoContentItem, VersionOptions.Published);
             
-    
+            // Send notification about the new photo
             Console.WriteLine("testEmailC");
             await _notificationService.NotifyNewPhotoUploadedAsync(photoContentItem.ContentItemId);
 
             Console.WriteLine("testEmailC");
       
+            // Redirect to the album view
             return RedirectToAction(nameof(Album), new { albumId = model.AlbumId });
         }
     }
@@ -214,6 +217,4 @@ namespace Gallery.Module.Controllers
         [BindNever]
         public IEnumerable<ContentItem> Albums { get; set; }
     }
-    
-  
 }

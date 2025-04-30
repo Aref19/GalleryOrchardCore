@@ -34,7 +34,7 @@ public sealed class Startup : StartupBase
 
     public override void Configure(IApplicationBuilder builder, IEndpointRouteBuilder routes, IServiceProvider serviceProvider)
     {
-        // Add this route for the homepage
+        // Add  route for the homepage
         routes.MapAreaControllerRoute(
             name: "Home",
             areaName: "Gallery.Module",

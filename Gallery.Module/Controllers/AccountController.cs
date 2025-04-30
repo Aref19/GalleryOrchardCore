@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OrchardCore.Users;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 
 namespace Gallery.Module.Controllers
 {
@@ -20,7 +19,7 @@ namespace Gallery.Module.Controllers
             _userManager = userManager;
         }
 
-        // ViewModels direkt im Controller definiert
+        // View Models defined directly in the controller
         public class LoginViewModel
         {
             [Required]
@@ -54,6 +53,7 @@ namespace Gallery.Module.Controllers
             public string ConfirmPassword { get; set; }
         }
 
+        // Login page display
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Login(string returnUrl = null)
@@ -62,6 +62,7 @@ namespace Gallery.Module.Controllers
             return View();
         }
 
+        // Login form processing
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -71,12 +72,12 @@ namespace Gallery.Module.Controllers
     
             if (ModelState.IsValid)
             {
-                // Zuerst den Benutzer anhand der E-Mail finden
+                // First find the user by email
                 var user = await _userManager.FindByEmailAsync(model.Email);
         
                 if (user != null)
                 {
-                    // Dann mit dem Benutzernamen anmelden
+                    // Then sign in with the username
                     var result = await _signInManager.PasswordSignInAsync(
                         user.UserName, 
                         model.Password, 
@@ -89,13 +90,15 @@ namespace Gallery.Module.Controllers
                     }
                 }
         
-                // Bei Misserfolg einen Fehler anzeigen
+                // If unsuccessful, show an error
                 ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                 return View(model);
             }
 
             return View(model);
         }
+
+        // Registration page display
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Register(string returnUrl = null)
@@ -103,6 +106,8 @@ namespace Gallery.Module.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
+
+        // Registration form processing
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -112,9 +117,10 @@ namespace Gallery.Module.Controllers
 
             if (ModelState.IsValid)
             {
-                
+                // Create username from email (part before @)
                 string username = model.Email.Split('@')[0]; 
               
+                // Keep only letters and digits in username
                 username = new string(username.Where(c => char.IsLetterOrDigit(c)).ToArray());
 
                 var user = new OrchardCore.Users.Models.User { UserName = username, Email = model.Email };
@@ -135,7 +141,7 @@ namespace Gallery.Module.Controllers
             return View(model);
         }
     
-
+        // Redirect helper method
         private IActionResult RedirectToLocal(string returnUrl)
         {
             return Redirect("/");
